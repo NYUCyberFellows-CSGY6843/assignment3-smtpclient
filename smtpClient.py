@@ -9,8 +9,8 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
 
     # Create socket called clientSocket and establish a TCP connection with mailserver and port
 
-    # Fill in start
-    # Fill in end
+    clientSocket = socket(AF_INET, SOCK_STREAM)
+    clientSocket.connect((mailserver, port))
 
     recv = clientSocket.recv(1024).decode()
     #print(recv) #You can use these print statement to validate return codes from the server.
@@ -26,28 +26,49 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
     #    print('250 reply not received from server.')
 
     # Send MAIL FROM command and handle server response.
-    # Fill in start
-    # Fill in end
+    mailFrom = "MAIL FROM: <alice@lab.net>\r\n"
+clientSocket.send(mailFrom.encode())
+    recv2 = clientSocket.recv(1024).decode()
+print(recv2)
+if recv2[:3] != '250':
+    print('250 reply not received from server.')
 
     # Send RCPT TO command and handle server response.
-    # Fill in start
-    # Fill in end
+    rcptTo = "RCPT TO: <bob@lab.net>\r\n"
+clientSocket.send(rcptTo.encode())
+    clientSocket.send(rcptTo.encode())
+recv3 = clientSocket.recv(1024).decode()
+print(recv3)
+if recv3[:3] != '250':
+    print('250 reply not received from server.')
 
     # Send DATA command and handle server response.
-    # Fill in start
-    # Fill in end
+    clientSocket.send(msg.encode())
+    clientSocket.send(endmsg.encode())
 
     # Send message data.
-    # Fill in start
-    # Fill in end
+    # recv4 = clientSocket.recv(1024).decode()
+print(recv4)
+if recv4[:3] != '250':
+    print('250 reply not received from server.')
+    quitCommand = "QUIT\r\n"
+clientSocket.send(quitCommand.encode())
 
     # Message ends with a single period, send message end and handle server response.
-    # Fill in start
-    # Fill in end
+    print(recv5)
+    if recv5[:3] != '250':
 
     # Send QUIT command and handle server response.
-    # Fill in start
-    # Fill in end
+    recv5 = clientSocket.recv(1024).decode()
+print(recv5)
+if recv5[:3] != '221':
+    print('221 reply not received from server.')
+    quitCommand = "QUIT\r\n"
+clientSocket.send(quitCommand.encode())
+recv5 = clientSocket.recv(1024).decode()
+print(recv5)
+if recv5[:3] != '221':
+    print('221 reply not received from server.')
 
 
 if __name__ == '__main__':
